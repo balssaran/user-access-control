@@ -60,11 +60,11 @@ class AuthenticationServiceImplTest {
 
         List<Role> roles = new ArrayList<>();
         Role role=new Role();
-        role.setName("USER");
+        role.setId(1l);
         //roles.add(Role.builder().name("USER").build());
         User user = new User();
         user.setUsername("testUser");
-        user.setRoles(roles);
+        user.setRole(role);
         user.setEnabled(true);
         when(userRepository.findByUsername("testUser")).thenReturn(Optional.of(user));
         when(properties.getJwtSecret()).thenReturn("secret");

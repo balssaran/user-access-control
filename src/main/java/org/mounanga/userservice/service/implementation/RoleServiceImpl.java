@@ -80,6 +80,15 @@ public class RoleServiceImpl implements RoleService {
     }
 
     @Override
+    public List<Role> getAllRoles() {
+        log.info("In getAllRoles()");
+       
+        List<Role> roles = roleRepository.findAll();
+        log.info("{} roles found", roles.size());
+        return roles;
+    }
+    
+    @Override
     public PageModel<RoleDTO> searchRoles(String keyword, int page, int size) {
         log.info("In searchRoles()");
         Pageable pageable = PageRequest.of(page, size);

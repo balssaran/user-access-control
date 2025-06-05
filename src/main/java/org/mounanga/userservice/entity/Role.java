@@ -9,6 +9,7 @@ import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @EntityListeners(AuditingEntityListener.class)
@@ -18,40 +19,44 @@ import java.time.LocalDateTime;
 @Builder
 @ToString
 public class Role {
+
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
+
 	
-	
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
 
-    @Column(nullable = false, unique = true)
-    private String name;
+	@Column(nullable = false, unique = true)
+	private String name;
 
-    @Column(nullable = false)
-    private String description;
+	@Column(nullable = false)
+	private String description;
 
-    @CreatedDate
-    private LocalDateTime createdDate;
+	@OneToMany(mappedBy = "role", cascade = CascadeType.ALL)
+	private List<RoleMenu> roleMenus;
 
-    @LastModifiedDate
-    private LocalDateTime lastModifiedDate;
+	@CreatedDate
+	private LocalDateTime createdDate;
 
-    @CreatedBy
-    private String createBy;
+	@LastModifiedDate
+	private LocalDateTime lastModifiedDate;
 
-    @LastModifiedBy
-    private String lastModifiedBy;
+	@CreatedBy
+	private String createBy;
 
-    public boolean isSuperAdminRole(){
-        return this.name.equals("SUPER_ADMIN");
-    }
+	@LastModifiedBy
+	private String lastModifiedBy;
 
-    public boolean isDefaultRole(){
-        return switch (this.name) {
-            case "USER", "ADMIN", "MODERATOR", "SUPER_ADMIN" -> true;
-            default -> false;
-        };
-    }
+	public boolean isSuperAdminRole() {
+		return this.name.equals("SUPER_ADMIN");
+	}
+
+	public boolean isDefaultRole() {
+		return switch (this.name) {
+		case "USER", "ADMIN", "MODERATOR", "SUPER_ADMIN" -> true;
+		default -> false;
+		};
+	}
 
 	public Long getId() {
 		return id;
@@ -75,6 +80,14 @@ public class Role {
 
 	public void setDescription(String description) {
 		this.description = description;
+	}
+
+	public List<RoleMenu> getRoleMenus() {
+		return roleMenus;
+	}
+
+	public void setRoleMenus(List<RoleMenu> roleMenus) {
+		this.roleMenus = roleMenus;
 	}
 
 	public LocalDateTime getCreatedDate() {
@@ -108,5 +121,7 @@ public class Role {
 	public void setLastModifiedBy(String lastModifiedBy) {
 		this.lastModifiedBy = lastModifiedBy;
 	}
-    
+
+	
+
 }

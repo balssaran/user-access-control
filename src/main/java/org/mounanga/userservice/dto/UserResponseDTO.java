@@ -12,7 +12,7 @@ import java.util.List;
 @Builder
 @ToString
 public class UserResponseDTO {
-    private String id;
+    private Long id;
     private String email;
     private String username;
     private Boolean enabled;
@@ -23,10 +23,10 @@ public class UserResponseDTO {
     private String lastModifiedBy;
     private ProfileResponseDTO profile;
     private List<String> roles;
-	public String getId() {
+	public Long getId() {
 		return id;
 	}
-	public void setId(String id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 	public String getEmail() {

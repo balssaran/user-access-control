@@ -3,6 +3,7 @@ package org.mounanga.userservice.web;
 import jakarta.validation.Valid;
 import org.mounanga.userservice.dto.PageModel;
 import org.mounanga.userservice.dto.RoleDTO;
+import org.mounanga.userservice.entity.Role;
 import org.mounanga.userservice.service.RoleService;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -42,6 +43,12 @@ public class RoleRestController {
     public PageModel<RoleDTO> getAllRoles(@RequestParam(defaultValue = "0", name = "page")  int page,
                                           @RequestParam(defaultValue = "9", name = "size")  int size) {
         return roleService.getAllRoles(page, size);
+    }
+    
+    
+    @GetMapping("/listAllRoles")
+    public List<Role> getAllRolesWithoutPagination() {
+        return roleService.getAllRoles();
     }
 
     @PreAuthorize("hasAnyAuthority('ADMIN','SUPER_ADMIN','USER')")

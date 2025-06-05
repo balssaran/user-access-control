@@ -1,37 +1,13 @@
 package org.mounanga.userservice.service.implementation;
 
-import lombok.extern.slf4j.Slf4j;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mounanga.userservice.dto.*;
-import org.mounanga.userservice.entity.Profile;
-import org.mounanga.userservice.entity.Role;
-import org.mounanga.userservice.entity.User;
-import org.mounanga.userservice.exception.FieldValidationException;
-import org.mounanga.userservice.exception.NotAuthorizedException;
-import org.mounanga.userservice.exception.RoleNotFoundException;
-import org.mounanga.userservice.exception.UserNotFoundException;
-import org.mounanga.userservice.repository.ProfileRepository;
 import org.mounanga.userservice.repository.RoleRepository;
 import org.mounanga.userservice.repository.UserRepository;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.*;
+import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @SpringBootTest
@@ -43,8 +19,7 @@ class UserServiceImplTest {
     @Mock
     private UserRepository userRepository;
 
-    @Mock
-    private ProfileRepository profileRepository;
+    
 
     @Mock
     private RoleRepository roleRepository;

@@ -1,13 +1,17 @@
 package org.mounanga.userservice.util;
 
+import java.util.List;
+
 import org.jetbrains.annotations.NotNull;
-import org.mounanga.userservice.dto.*;
-import org.mounanga.userservice.entity.Profile;
+import org.mounanga.userservice.dto.MenuDTO;
+import org.mounanga.userservice.dto.PageModel;
+import org.mounanga.userservice.dto.RoleDTO;
+import org.mounanga.userservice.dto.UserRequestDTO;
+import org.mounanga.userservice.dto.UserResponseDTO;
+import org.mounanga.userservice.entity.Menu;
 import org.mounanga.userservice.entity.Role;
 import org.mounanga.userservice.entity.User;
 import org.springframework.data.domain.Page;
-
-import java.util.List;
 
 public class Mappers {
 
@@ -38,8 +42,8 @@ public class Mappers {
         userDTO.setLastModifiedBy(user.getLastModifiedBy());
         userDTO.setLastModifiedDate(user.getLastModifiedDate());
         userDTO.setLastLogin(user.getLastLogin());
-        userDTO.setRoles(rolesToStringList(user.getRoles()));
-        userDTO.setProfile(fromProfile(user.getProfile()));
+        //userDTO.setRoles(rolesToStringList(user.getRoles()));
+        //userDTO.setProfile(fromProfile(user.getProfile()));
         return userDTO;
     }
 
@@ -50,37 +54,42 @@ public class Mappers {
         return userList.stream().map(Mappers::fromUser).toList();
     }
 
-    public static @NotNull Profile fromUserProfileRequestDTO(final @NotNull UserRequestDTO userRequestDTO) {
-        final Profile profile = new Profile();
-        profile.setLastname(userRequestDTO.getLastname());
-        profile.setPlaceOfBirth(userRequestDTO.getPlaceOfBirth());
-        profile.setNationality(userRequestDTO.getNationality());
-        profile.setPin(userRequestDTO.getPin());
-        profile.setBirthday(userRequestDTO.getBirthday());
-        profile.setFirstname(userRequestDTO.getFirstname());
-        profile.setGender(userRequestDTO.getGender());
-        return profile;
-    }
-
-    public static @NotNull ProfileResponseDTO fromUserProfile(final @NotNull Profile profile) {
-        final ProfileResponseDTO userProfileDTO = new ProfileResponseDTO();
-        userProfileDTO.setLastname(profile.getLastname());
-        userProfileDTO.setBirthday(profile.getBirthday());
-        userProfileDTO.setFirstname(profile.getFirstname());
-        userProfileDTO.setGender(profile.getGender());
-        userProfileDTO.setPlaceOfBirth(profile.getPlaceOfBirth());
-        userProfileDTO.setNationality(profile.getNationality());
-        userProfileDTO.setPin(profile.getPin());
-        userProfileDTO.setId(profile.getId());
-        userProfileDTO.setPin(profile.getPin());
-        return userProfileDTO;
-    }
+	/*
+	 * public static @NotNull Profile fromUserProfileRequestDTO(final @NotNull
+	 * UserRequestDTO userRequestDTO) { final Profile profile = new Profile();
+	 * profile.setLastname(userRequestDTO.getLastname());
+	 * profile.setPlaceOfBirth(userRequestDTO.getPlaceOfBirth());
+	 * profile.setNationality(userRequestDTO.getNationality());
+	 * profile.setPin(userRequestDTO.getPin());
+	 * profile.setBirthday(userRequestDTO.getBirthday());
+	 * profile.setFirstname(userRequestDTO.getFirstname());
+	 * profile.setGender(userRequestDTO.getGender()); return profile; }
+	 * 
+	 * public static @NotNull ProfileResponseDTO fromUserProfile(final @NotNull
+	 * Profile profile) { final ProfileResponseDTO userProfileDTO = new
+	 * ProfileResponseDTO(); userProfileDTO.setLastname(profile.getLastname());
+	 * userProfileDTO.setBirthday(profile.getBirthday());
+	 * userProfileDTO.setFirstname(profile.getFirstname());
+	 * userProfileDTO.setGender(profile.getGender());
+	 * userProfileDTO.setPlaceOfBirth(profile.getPlaceOfBirth());
+	 * userProfileDTO.setNationality(profile.getNationality());
+	 * userProfileDTO.setPin(profile.getPin());
+	 * userProfileDTO.setId(profile.getId());
+	 * userProfileDTO.setPin(profile.getPin()); return userProfileDTO; }
+	 */
 
     public static RoleDTO fromRole(final Role role){
         if(role == null){
             return null;
         }
         return new RoleDTO(role.getId(), role.getName(), role.getDescription());
+    }
+    
+    public static MenuDTO fromMenu(final Menu menu){
+        if(menu == null){
+            return null;
+        }
+        return new MenuDTO(menu.getId(), menu.getName(), menu.getUrlPath());
     }
 
     public static List<RoleDTO> fromListOfRole(final List<Role> roles){
@@ -95,6 +104,14 @@ public class Mappers {
         role.setName(roleDTO.name());
         role.setDescription(roleDTO.description());
         return role;
+    }
+    
+    
+    public static @NotNull Menu fromMenuDTO(final @NotNull MenuDTO menuDTO) {
+        final Menu menu = new Menu();
+        menu.setName(menuDTO.menuName());
+        menu.setUrlPath(menuDTO.urlPath());
+        return menu;
     }
 
     public static PageModel<UserResponseDTO> fromPageOfUsers(final Page<User> entityPage, final int page) {
@@ -144,19 +161,16 @@ public class Mappers {
         return roles.stream().map(Role::getName).toList();
     }
 
-    private static ProfileResponseDTO fromProfile(final Profile profile) {
-        if(profile == null) {
-            return null;
-        }
-        final ProfileResponseDTO profileDTO = new ProfileResponseDTO();
-        profileDTO.setId(profile.getId());
-        profileDTO.setFirstname(profile.getFirstname());
-        profileDTO.setLastname(profile.getLastname());
-        profileDTO.setBirthday(profile.getBirthday());
-        profileDTO.setGender(profile.getGender());
-        profileDTO.setPlaceOfBirth(profile.getPlaceOfBirth());
-        profileDTO.setNationality(profile.getNationality());
-        profileDTO.setPin(profile.getPin());
-        return profileDTO;
-    }
+	/*
+	 * private static ProfileResponseDTO fromProfile(final Profile profile) {
+	 * if(profile == null) { return null; } final ProfileResponseDTO profileDTO =
+	 * new ProfileResponseDTO(); profileDTO.setId(profile.getId());
+	 * profileDTO.setFirstname(profile.getFirstname());
+	 * profileDTO.setLastname(profile.getLastname());
+	 * profileDTO.setBirthday(profile.getBirthday());
+	 * profileDTO.setGender(profile.getGender());
+	 * profileDTO.setPlaceOfBirth(profile.getPlaceOfBirth());
+	 * profileDTO.setNationality(profile.getNationality());
+	 * profileDTO.setPin(profile.getPin()); return profileDTO; }
+	 */
 }

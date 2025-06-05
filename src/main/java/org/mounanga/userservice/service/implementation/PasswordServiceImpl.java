@@ -89,7 +89,8 @@ public class PasswordServiceImpl implements PasswordService {
     //PRIVATE
 
     private @NotNull String getFullName(@NotNull Verification verification) {
-        return verification.getUser().getProfile() != null ? verification.getUser().getProfile().getFullName() : "User";
+        return null;
+        		//verification.getUser().getProfile() != null ? verification.getUser().getProfile().getFullName() : "User";
     }
 
     private void saveVerification(@NotNull User user) {

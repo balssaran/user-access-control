@@ -1,15 +1,24 @@
 package org.mounanga.userservice.service.implementation;
 
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
+import java.time.LocalDateTime;
+import java.util.Optional;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mounanga.userservice.dto.EmailRequestDTO;
 import org.mounanga.userservice.dto.ResetPasswordRequestDTO;
-import org.mounanga.userservice.entity.Profile;
 import org.mounanga.userservice.entity.User;
 import org.mounanga.userservice.entity.Verification;
-import org.mounanga.userservice.enums.Gender;
 import org.mounanga.userservice.exception.UserNotFoundException;
 import org.mounanga.userservice.exception.VerificationExpiredException;
 import org.mounanga.userservice.exception.VerificationNotFoundException;
@@ -18,14 +27,6 @@ import org.mounanga.userservice.repository.VerificationRepository;
 import org.mounanga.userservice.util.MailingService;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.crypto.password.PasswordEncoder;
-
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.Optional;
-
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.*;
-import static org.mockito.Mockito.*;
 
 @SpringBootTest
 class PasswordServiceImplTest {
@@ -44,23 +45,20 @@ class PasswordServiceImplTest {
 
     private User user;
     private Verification verification;
-    Profile profile;
+   // Profile profile;
 
     @BeforeEach
     public void setUp() {
         passwordService = new PasswordServiceImpl(verificationRepository, userRepository, mailingService, passwordEncoder);
 
         String system = "SYSTEM";
-		Profile profile = new Profile();
-		profile.setGender(Gender.M);
-		profile.setFirstname(system);
-		profile.setLastname(system);
-		profile.setNationality(system);
-		profile.setBirthday(LocalDate.now());
-		profile.setPin(system);
-		profile.setPlaceOfBirth(system);
-		profile.setCreatedDate(LocalDateTime.now());
-		profile.setCreateBy(system);
+		/*
+		 * Profile profile = new Profile(); profile.setGender(Gender.M);
+		 * profile.setFirstname(system); profile.setLastname(system);
+		 * profile.setNationality(system); profile.setBirthday(LocalDate.now());
+		 * profile.setPin(system); profile.setPlaceOfBirth(system);
+		 * profile.setCreatedDate(LocalDateTime.now()); profile.setCreateBy(system);
+		 */
 		/*
 		 * profile =
 		 * Profile.builder().id("id").firstname("john").lastname("doe").nationality(
@@ -70,7 +68,7 @@ class PasswordServiceImplTest {
 		 */
 
         user = new User();
-        user.setProfile(profile);
+		/* user.setProfile(profile); */
         user.setEmail("test@example.com");
 
         verification = new Verification();

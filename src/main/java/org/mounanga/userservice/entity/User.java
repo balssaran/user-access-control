@@ -21,8 +21,8 @@ import java.util.List;
 @ToString
 public class User {
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    private String id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
     @Column(unique = true, nullable = false)
     private String email;
@@ -54,13 +54,18 @@ public class User {
     @Column(nullable = false)
     private boolean passwordNeedsToBeChanged = false;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "profile_id", referencedColumnName = "id")
-    private Profile profile;
+	
 
-    @ManyToMany(cascade=CascadeType.ALL, fetch = FetchType.EAGER)
-    @JoinTable(name="user_role",joinColumns = @JoinColumn(name="user_id") , inverseJoinColumns = @JoinColumn(name="role_id"))
-    private List<Role> roles;
+    @ManyToOne
+    @JoinColumn(name = "role_id") // this creates a role_id column in the User table
+    private Role role;
+    
+    
+    @ManyToOne
+    @JoinColumn(name = "branch_id") // this creates a role_id column in the User table
+    private Branch branch;
+    
+    
 
     public boolean isEnabled(){
         return Boolean.TRUE.equals(this.enabled);
@@ -70,25 +75,17 @@ public class User {
         return Boolean.FALSE.equals(this.enabled);
     }
 
-    public void addRole(Role role){
-        if(this.roles == null){
-            this.roles = new ArrayList<>();
-        }
-        if(role != null && !roles.contains(role)){
-            this.roles.add(role);
-        }
-    }
-
-    public void removeRole(Role role){
-        if(this.roles != null && role != null && role.getName().equals("USER")){
-                this.roles.remove(role);
-        }
-    }
-
-    public boolean isSuperAdmin(){
-        return roles.stream()
-                .anyMatch(role -> "SUPER_ADMIN".equals(role.getName()));
-    }
+	/*
+	 * public void addRole(Role role){ if(this.roles == null){ this.roles = new
+	 * ArrayList<>(); } if(role != null && !roles.contains(role)){
+	 * this.roles.add(role); } }
+	 * 
+	 * public void removeRole(Role role){ if(this.roles != null && role != null &&
+	 * role.getName().equals("USER")){ this.roles.remove(role); } }
+	 * 
+	 * public boolean isSuperAdmin(){ return roles.stream() .anyMatch(role ->
+	 * "SUPER_ADMIN".equals(role.getName())); }
+	 */
 
     public void markPasswordAsChanged() {
         this.passwordNeedsToBeChanged = false;
@@ -99,11 +96,13 @@ public class User {
 		return passwordNeedsToBeChanged;
 	}
 
-	public String getId() {
+	
+
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(String id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 
@@ -179,26 +178,36 @@ public class User {
 		this.lastModifiedBy = lastModifiedBy;
 	}
 
-	public Profile getProfile() {
-		
-		return profile;
-	}
-
-	public void setProfile(Profile profile) {
-		this.profile = profile;
-	}
-
-	public List<Role> getRoles() {
-		return roles;
-	}
-
-	public void setRoles(List<Role> roles) {
-		this.roles = roles;
-	}
+	/*
+	 * public Profile getProfile() {
+	 * 
+	 * return profile; }
+	 * 
+	 * public void setProfile(Profile profile) { this.profile = profile; }
+	 */
+	
 
 	public void setPasswordNeedsToBeChanged(boolean passwordNeedsToBeChanged) {
 		this.passwordNeedsToBeChanged = passwordNeedsToBeChanged;
 	}
+
+	public Role getRole() {
+		return role;
+	}
+
+	public void setRole(Role role) {
+		this.role = role;
+	}
+
+	public Branch getBranch() {
+		return branch;
+	}
+
+	public void setBranch(Branch branch) {
+		this.branch = branch;
+	}
+	
+	
 
 
 }

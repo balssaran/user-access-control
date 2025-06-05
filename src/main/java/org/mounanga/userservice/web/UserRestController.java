@@ -4,6 +4,7 @@ import jakarta.validation.Valid;
 import org.mounanga.userservice.dto.*;
 import org.mounanga.userservice.security.SecurityInformation;
 import org.mounanga.userservice.service.UserService;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
@@ -29,19 +30,19 @@ public class UserRestController {
 
     @PreAuthorize("hasAnyAuthority('ADMIN','SUPER_ADMIN')")
     @PutMapping("/update/{id}")
-    public UserResponseDTO updateUser(@PathVariable String id, @Valid @RequestBody UpdateEmailUsernameDTO dto) {
+    public UserResponseDTO updateUser(@PathVariable Long id, @Valid @RequestBody UpdateEmailUsernameDTO dto) {
         return userService.updateUser(id, dto);
     }
 
     @PreAuthorize("hasAnyAuthority('ADMIN','SUPER_ADMIN')")
     @PutMapping("/update-profile/{id}")
-    public ProfileResponseDTO updateProfile(@PathVariable String id, @Valid @RequestBody UserRequestDTO dto) {
+    public ProfileResponseDTO updateProfile(@PathVariable Long id, @Valid @RequestBody UserRequestDTO dto) {
         return userService.updateProfile(id, dto);
     }
 
     @PreAuthorize("hasAnyAuthority('ADMIN','SUPER_ADMIN', 'USER')")
     @GetMapping("/get/{id}")
-    public UserResponseDTO getUserById(@PathVariable String id) {
+    public UserResponseDTO getUserById(@PathVariable Long id) {
         return userService.getUserById(id);
     }
 
@@ -62,13 +63,13 @@ public class UserRestController {
 
     @PreAuthorize("hasAnyAuthority('ADMIN','SUPER_ADMIN')")
     @DeleteMapping("/delete/{id}")
-    public void deleteUserById(@PathVariable String id) {
+    public void deleteUserById(@PathVariable Long id) {
         userService.deleteUserById(id);
     }
 
     @PreAuthorize("hasAnyAuthority('ADMIN','SUPER_ADMIN')")
     @DeleteMapping("/delete-all")
-    public void deleteAllUsersByIds(@RequestBody List<String> ids) {
+    public void deleteAllUsersByIds(@RequestBody List<Long> ids) {
         userService.deleteAllUsersByIds(ids);
     }
 
@@ -90,5 +91,11 @@ public class UserRestController {
         return userService.getUserByUsername(
                 securityInformation.getCurrentUsername()
         );
+    }
+    
+    
+    @GetMapping("/{userId}/menu-info")
+    public ResponseEntity<UserRoleMenuResponseDTO> getUserRoleMenus(@PathVariable Long userId) {
+        return ResponseEntity.ok(userService.getUserRoleMenu(userId));
     }
 }

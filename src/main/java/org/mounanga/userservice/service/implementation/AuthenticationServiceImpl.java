@@ -70,12 +70,13 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     }
 
     private String generateToken(@NotNull User user) {
-        List<String> roles = user.getRoles().stream().map(Role::getName).toList();
+        //List<String> roles = user.getRoles().stream().map(Role::getName).toList();
+        String role = user.getRole().getName();
         Algorithm algorithm = Algorithm.HMAC256(properties.getJwtSecret());
         Date expiration = new Date(System.currentTimeMillis() + properties.getJwtExpiration());
         return JWT.create()
                 .withSubject(user.getUsername())
-                .withArrayClaim("roles", roles.toArray(new String[0]))
+                .withClaim("roles", role)
                 .withClaim("fullName", getFullName(user))
                 .withExpiresAt(expiration)
                 .sign(algorithm);
@@ -89,7 +90,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
                 
                 If you are not the source of this manoeuvre: please change your password or contact the administrator..
                 """.formatted(getFullName(user), formatedDateTime(loginDateTime));
-        mailingService.sendMail(user.getEmail(), "Login Notification",body);
+       // mailingService.sendMail(user.getEmail(), "Login Notification",body);
     }
 
     private @NotNull String formatedDateTime(@NotNull LocalDateTime dateTime) {
@@ -98,10 +99,10 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     }
 
     private @NotNull String getFullName(@NotNull User user) {
-        if(user.getProfile() == null){
-            return "";
-        }
-        return user.getProfile().getFullName();
+		/*
+		 * if(user.getProfile() == null){ return ""; }
+		 */
+        return null;
     }
 
 

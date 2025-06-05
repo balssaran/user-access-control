@@ -4,8 +4,8 @@ import jakarta.validation.constraints.NotBlank;
 
 public record UserRoleRequestDTO(
         @NotBlank(message = "field 'roleName' is mandatory: it cannot be blank")
-        String roleName,
+        Long roleId,
 
         @NotBlank(message = "field 'userId' is mandatory: it cannot be blank")
-        String userId) {
+        Long userId) {
 }
