@@ -2,6 +2,8 @@ package org.mounanga.userservice.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+
+import org.mounanga.userservice.enums.Gender;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
@@ -20,60 +22,65 @@ import java.util.List;
 @Builder
 @ToString
 public class User {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
 
-    @Column(unique = true, nullable = false)
-    private String email;
+	@Column(unique = true, nullable = false)
+	private String email;
 
-    @Column(unique = true, nullable = false)
-    private String username;
+	@Column(unique = true, nullable = false)
+	private String username;
 
-    @Column(nullable = false)
-    private String password;
+	@Column( nullable = false)
+	private String firstname;
 
-    @Column(nullable = false)
-    private Boolean enabled;
+	@Column(nullable = false)
+	private String lastname;
 
-    @Column(nullable = false)
-    private LocalDateTime lastLogin;
+	@Column(nullable = false)
+	private String password;
 
-    @CreatedDate
-    private LocalDateTime createdDate;
+	@Column(nullable = false)
+	private Boolean enabled;
 
-    @LastModifiedDate
-    private LocalDateTime lastModifiedDate;
+	@Column(name="last_login",nullable = false)
+	private LocalDateTime lastLogin;
 
-    @CreatedBy
-    private String createBy;
+	@Column(name="created_date")
+	private LocalDateTime createdDate;
 
-    @LastModifiedBy
-    private String lastModifiedBy;
-
-    @Column(nullable = false)
-    private boolean passwordNeedsToBeChanged = false;
+	@Column(name="last_modified_date")
+	private LocalDateTime lastModifiedDate;
 
 	
+	@Column(name = "create_by")
+	private Long createBy;
 
-    @ManyToOne
-    @JoinColumn(name = "role_id") // this creates a role_id column in the User table
-    private Role role;
-    
-    
-    @ManyToOne
-    @JoinColumn(name = "branch_id") // this creates a role_id column in the User table
-    private Branch branch;
-    
-    
+	@Column(name="last_modified_by")
+	private Long lastModifiedBy;
 
-    public boolean isEnabled(){
-        return Boolean.TRUE.equals(this.enabled);
-    }
+	@Column(nullable = false)
+	private boolean passwordNeedsToBeChanged = false;
 
-    public boolean isDisabled(){
-        return Boolean.FALSE.equals(this.enabled);
-    }
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name = "role_id") // this creates a role_id column in the User table
+	private Role role;
+
+	@ManyToOne
+	@JoinColumn(name = "branch_id") // this creates a role_id column in the User table
+	private Branch branch;
+	
+	@Enumerated(EnumType.STRING)
+	private Gender gender;
+
+	public boolean isEnabled() {
+		return Boolean.TRUE.equals(this.enabled);
+	}
+
+	public boolean isDisabled() {
+		return Boolean.FALSE.equals(this.enabled);
+	}
 
 	/*
 	 * public void addRole(Role role){ if(this.roles == null){ this.roles = new
@@ -87,16 +94,14 @@ public class User {
 	 * "SUPER_ADMIN".equals(role.getName())); }
 	 */
 
-    public void markPasswordAsChanged() {
-        this.passwordNeedsToBeChanged = false;
-    }
+	public void markPasswordAsChanged() {
+		this.passwordNeedsToBeChanged = false;
+	}
 
 	public boolean isPasswordNeedsToBeChanged() {
 		// TODO Auto-generated method stub
 		return passwordNeedsToBeChanged;
 	}
-
-	
 
 	public Long getId() {
 		return id;
@@ -120,6 +125,22 @@ public class User {
 
 	public void setUsername(String username) {
 		this.username = username;
+	}
+
+	public String getFirstname() {
+		return firstname;
+	}
+
+	public void setFirstname(String firstname) {
+		this.firstname = firstname;
+	}
+
+	public String getLastname() {
+		return lastname;
+	}
+
+	public void setLastname(String lastname) {
+		this.lastname = lastname;
 	}
 
 	public String getPassword() {
@@ -162,19 +183,19 @@ public class User {
 		this.lastModifiedDate = lastModifiedDate;
 	}
 
-	public String getCreateBy() {
+	public Long getCreateBy() {
 		return createBy;
 	}
 
-	public void setCreateBy(String createBy) {
+	public void setCreateBy(Long createBy) {
 		this.createBy = createBy;
 	}
 
-	public String getLastModifiedBy() {
+	public Long getLastModifiedBy() {
 		return lastModifiedBy;
 	}
 
-	public void setLastModifiedBy(String lastModifiedBy) {
+	public void setLastModifiedBy(Long lastModifiedBy) {
 		this.lastModifiedBy = lastModifiedBy;
 	}
 
@@ -185,7 +206,6 @@ public class User {
 	 * 
 	 * public void setProfile(Profile profile) { this.profile = profile; }
 	 */
-	
 
 	public void setPasswordNeedsToBeChanged(boolean passwordNeedsToBeChanged) {
 		this.passwordNeedsToBeChanged = passwordNeedsToBeChanged;
@@ -206,8 +226,14 @@ public class User {
 	public void setBranch(Branch branch) {
 		this.branch = branch;
 	}
-	
-	
 
+	public Gender getGender() {
+		return gender;
+	}
 
+	public void setGender(Gender gender) {
+		this.gender = gender;
+	}
+
+	
 }

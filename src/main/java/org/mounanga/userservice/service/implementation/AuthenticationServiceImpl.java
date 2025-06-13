@@ -78,6 +78,8 @@ public class AuthenticationServiceImpl implements AuthenticationService {
                 .withSubject(user.getUsername())
                 .withClaim("roles", role)
                 .withClaim("fullName", getFullName(user))
+                .withClaim("roleid", user.getRole().getId())
+                .withClaim("userid", user.getId())
                 .withExpiresAt(expiration)
                 .sign(algorithm);
     }

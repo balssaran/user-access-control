@@ -8,9 +8,12 @@ import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import java.time.LocalDateTime;
 import java.util.List;
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 @Entity
 @EntityListeners(AuditingEntityListener.class)
 @Getter
@@ -35,17 +38,21 @@ public class Role {
 	@OneToMany(mappedBy = "role", cascade = CascadeType.ALL)
 	private List<RoleMenu> roleMenus;
 
-	@CreatedDate
+	@Column(name="created_date")
 	private LocalDateTime createdDate;
 
-	@LastModifiedDate
+	@Column(name="last_modified_date")
 	private LocalDateTime lastModifiedDate;
 
-	@CreatedBy
+	@Column(name="create_by")
 	private String createBy;
 
-	@LastModifiedBy
+	@Column(name="last_modified_by")
 	private String lastModifiedBy;
+	
+	
+	@Column(nullable = false)
+	private Boolean enabled;
 
 	public boolean isSuperAdminRole() {
 		return this.name.equals("SUPER_ADMIN");
@@ -120,6 +127,14 @@ public class Role {
 
 	public void setLastModifiedBy(String lastModifiedBy) {
 		this.lastModifiedBy = lastModifiedBy;
+	}
+
+	public Boolean getEnabled() {
+		return enabled;
+	}
+
+	public void setEnabled(Boolean enabled) {
+		this.enabled = enabled;
 	}
 
 	

@@ -3,6 +3,7 @@ package org.mounanga.userservice.service.implementation;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import org.jetbrains.annotations.NotNull;
 import org.mounanga.userservice.dto.PageModel;
@@ -12,18 +13,20 @@ import org.mounanga.userservice.dto.UserRequestDTO;
 import org.mounanga.userservice.dto.UserResponseDTO;
 import org.mounanga.userservice.dto.UserRoleMenuResponseDTO;
 import org.mounanga.userservice.dto.UserRoleRequestDTO;
+import org.mounanga.userservice.entity.Branch;
 import org.mounanga.userservice.entity.Menu;
 import org.mounanga.userservice.entity.Role;
 import org.mounanga.userservice.entity.RoleMenu;
 import org.mounanga.userservice.entity.User;
 import org.mounanga.userservice.exception.FieldError;
 import org.mounanga.userservice.exception.FieldValidationException;
-import org.mounanga.userservice.exception.NotAuthorizedException;
 import org.mounanga.userservice.exception.RoleNotFoundException;
 import org.mounanga.userservice.exception.UserNotFoundException;
+import org.mounanga.userservice.repository.BranchRepository;
 import org.mounanga.userservice.repository.RoleRepository;
 import org.mounanga.userservice.repository.UserRepository;
 import org.mounanga.userservice.service.UserService;
+import org.mounanga.userservice.util.MailingService;
 import org.mounanga.userservice.util.Mappers;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -47,30 +50,58 @@ public class UserServiceImpl implements UserService {
 
 	private final RoleRepository roleRepository;
 	private final PasswordEncoder passwordEncoder;
+	private final BranchRepository branchRepository;
+
+	private final MailingService mailingService;
 
 	public UserServiceImpl(UserRepository userRepository, RoleRepository roleRepository,
-			PasswordEncoder passwordEncoder) {
+			PasswordEncoder passwordEncoder, MailingService mailingService, BranchRepository branchRepository) {
 		this.userRepository = userRepository;
 
 		this.roleRepository = roleRepository;
 		this.passwordEncoder = passwordEncoder;
+		this.mailingService = mailingService;
+		this.branchRepository = branchRepository;
 	}
 
 	@Transactional
 	@Override
 	public UserResponseDTO createUser(@NotNull UserRequestDTO dto) {
 		log.info("In createUser()");
-		validationBeforeSaved(dto.getEmail(), dto.getUsername(), dto.getPin());
+		validationBeforeSaved(dto.getEmail(), dto.getUsername(), dto.getUserId());
+	
 		User user = Mappers.fromUserRequestDTO(dto);
 		/*
 		 * Profile profile = Mappers.fromUserProfileRequestDTO(dto);
 		 * user.setProfile(profile);
 		 */
-		user.setPassword(passwordEncoder.encode(user.getPassword()));
+		String password = UUID.randomUUID().toString();
+		user.setPassword(passwordEncoder.encode(password));
 		user.setPasswordNeedsToBeChanged(true);
-		user.setEnabled(Boolean.FALSE);
 		user.setLastLogin(LocalDateTime.now());
+
+		/*
+		 * Role role = roleRepository.findById(dto.getRoleId()) .orElseThrow(() -> new
+		 * RuntimeException("Role not found")); Branch branch =
+		 * branchRepository.findById(dto.getBranchId()) .orElseThrow(() -> new
+		 * RuntimeException("Branch not found")); user.setRole(role);
+		 * user.setBranch(branch);
+		 */
+
 		User savedUser = userRepository.save(user);
+
+		log.info("User Created successfully");
+		/*
+		 * String body = String.format( """
+		 * 
+		 * Your account has been created in our system. <br /> Please use the following
+		 * password to log in for the first time. We recommend changing it after logging
+		 * in. <br />
+		 * 
+		 * %s """, password);
+		 */
+		mailingService.sendMail(user.getEmail(), "User Created", password);
+
 		log.info("User saved with id '{}' at '{}' by '{}'", savedUser.getId(), savedUser.getCreatedDate(),
 				savedUser.getCreateBy());
 		return Mappers.fromUser(savedUser);
@@ -78,12 +109,11 @@ public class UserServiceImpl implements UserService {
 
 	@Transactional
 	@Override
-	public UserResponseDTO updateUser(Long id, @NotNull UpdateEmailUsernameDTO dto) {
+	public UserResponseDTO updateUser(Long id, @NotNull UserRequestDTO dto) {
 		log.info("In updateUser()");
 		User existingUser = findUserById(id);
-		validationBeforeUpdate(existingUser, dto.email(), dto.username());
-		existingUser.setUsername(dto.username());
-		existingUser.setEmail(dto.email());
+		validationBeforeUpdate(existingUser, dto.getEmail(), dto.getUsername());
+		existingUser = Mappers.fromUserRequestDTOforUpdate(dto,existingUser);
 		User updatedUser = userRepository.save(existingUser);
 		log.info("user with id '{}' updated at '{}' by '{}'", updatedUser.getId(), updatedUser.getLastModifiedDate(),
 				updatedUser.getLastModifiedBy());
@@ -216,17 +246,30 @@ public class UserServiceImpl implements UserService {
 		return roleRepository.findByName(roleName).orElseThrow(() -> new RoleNotFoundException("Role not found."));
 	}
 
-	private void validationBeforeSaved(String email, String username, String pin) {
+	private void validationBeforeSaved(String email, String username, Long userId) {
 		List<FieldError> fieldErrors = new ArrayList<>();
-		if (userRepository.existsByEmail(email)) {
-			fieldErrors.add(new FieldError("email", "Email already exists"));
-		}
-		if (userRepository.existsByUsername(username)) {
-			fieldErrors.add(new FieldError("username", "Username already exists"));
-		}
+		if (userId== null || userId == 0) {
+			if (userRepository.existsByEmail(email)) {
+				fieldErrors.add(new FieldError("email", "Email already exists"));
+			}
+			if (userRepository.existsByUsername(username)) {
+				fieldErrors.add(new FieldError("username", "Username already exists"));
+			}
 
-		if (!fieldErrors.isEmpty()) {
-			throw new FieldValidationException("Validation error", fieldErrors);
+			if (!fieldErrors.isEmpty()) {
+				throw new FieldValidationException("Validation error", fieldErrors);
+			}
+		}else {
+			if (userRepository.existsByEmail(email,userId)) {
+				fieldErrors.add(new FieldError("email", "Email already exists"));
+			}
+			if (userRepository.existsByUsername(username,userId)) {
+				fieldErrors.add(new FieldError("username", "Username already exists"));
+			}
+
+			if (!fieldErrors.isEmpty()) {
+				throw new FieldValidationException("Validation error", fieldErrors);
+			}	
 		}
 	}
 

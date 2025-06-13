@@ -13,6 +13,8 @@ import org.springframework.security.web.authentication.www.BasicAuthenticationFi
 
 import static org.springframework.security.config.http.SessionCreationPolicy.STATELESS;
 
+import org.springframework.beans.factory.annotation.Autowired;
+
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity(securedEnabled = true)
@@ -20,7 +22,8 @@ public class SecurityConfiguration {
 
     private final JWTAuthorizationFilter jwtAuthorizationFilter;
     private final AuthenticationProvider authenticationProvider;
-
+    
+    
     public SecurityConfiguration(JWTAuthorizationFilter jwtAuthorizationFilter, AuthenticationProvider authenticationProvider) {
         this.jwtAuthorizationFilter = jwtAuthorizationFilter;
         this.authenticationProvider = authenticationProvider;
@@ -47,6 +50,8 @@ public class SecurityConfiguration {
                 .sessionManagement(session -> session.sessionCreationPolicy(STATELESS))
                 .authenticationProvider(authenticationProvider)
                 .addFilterBefore(jwtAuthorizationFilter, BasicAuthenticationFilter.class);
+                //.addFilterAfter(jwtAuthorizationFilter, JWTAuthorizationFilter.class);
+        
         return http.build();
     }
 }

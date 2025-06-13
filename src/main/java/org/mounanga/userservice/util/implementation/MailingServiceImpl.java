@@ -47,7 +47,7 @@ public class MailingServiceImpl implements MailingService {
             MimeMessage mimeMessage = mailSender.createMimeMessage();
             MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, MULTIPART_MODE_MIXED, UTF_8.name());
             Map<String, Object> properties = new HashMap<>();
-            properties.put("data", body);
+            properties.put("password", body);
             Context context = new Context();
             context.setVariables(properties);
             helper.setTo(to);

@@ -43,7 +43,7 @@ public class RoleServiceImpl implements RoleService {
             throw new ResourceAlreadyExistException("Role with name " + role.getName() + " already exists");
         }
         Role savedRole = roleRepository.save(role);
-        log.info("Role with name '{}' created at '{}' by '{}'", role.getName(), savedRole.getCreatedDate(), savedRole.getCreateBy());
+        log.info("Role with name '{}' created at ", role.getName());
         return Mappers.fromRole(savedRole);
     }
 
@@ -58,7 +58,7 @@ public class RoleServiceImpl implements RoleService {
         role.setName(dto.name());
         role.setDescription(dto.description());
         Role updatedRole = roleRepository.save(role);
-        log.info("Role with name '{}' updated at '{}' by '{}'", updatedRole.getName(), role.getLastModifiedDate(), updatedRole.getLastModifiedBy());
+        log.info("Role with name '{}' updated at ", updatedRole.getName());
         return Mappers.fromRole(updatedRole);
     }
 

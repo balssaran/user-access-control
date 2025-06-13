@@ -8,6 +8,8 @@ import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -23,11 +25,13 @@ public class RoleMenu {
 	@ManyToOne
 	@MapsId("roleId")
 	@JoinColumn(name = "role_id")
+	@JsonIgnore
 	private Role role;
 
 	@ManyToOne
 	@MapsId("menuId")
 	@JoinColumn(name = "menu_id")
+	@JsonIgnore
 	private Menu menu;
 
 	@Column(name = "created_by")

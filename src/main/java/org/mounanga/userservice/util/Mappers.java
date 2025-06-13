@@ -1,5 +1,6 @@
 package org.mounanga.userservice.util;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.jetbrains.annotations.NotNull;
@@ -22,9 +23,30 @@ public class Mappers {
     public static @NotNull User fromUserRequestDTO(final @NotNull UserRequestDTO userResponseDTO) {
         final User user = new User();
         user.setUsername(userResponseDTO.getUsername());
-        user.setPassword(userResponseDTO.getPassword());
         user.setEmail(userResponseDTO.getEmail());
-        user.setEnabled(Boolean.FALSE);
+        user.setEnabled(Boolean.TRUE);
+        user.setFirstname(userResponseDTO.getFirstname());
+        user.setLastname(userResponseDTO.getLastname());
+        user.setRole(userResponseDTO.getRole());
+        user.setBranch(userResponseDTO.getBranch());
+        user.setId(userResponseDTO.getUserId());
+        user.setCreateBy(userResponseDTO.getCreatedBy());
+        return user;
+    }
+    
+    public static @NotNull User fromUserRequestDTOforUpdate(final @NotNull UserRequestDTO userResponseDTO,User user) {
+        //final User user = new User();
+        //user.setUsername(userResponseDTO.getUsername());
+        user.setEmail(userResponseDTO.getEmail());
+        user.setEnabled(userResponseDTO.getEnabled());
+        user.setFirstname(userResponseDTO.getFirstname());
+        user.setLastname(userResponseDTO.getLastname());
+        user.setRole(userResponseDTO.getRole());
+        user.setBranch(userResponseDTO.getBranch());
+        //user.setId(userResponseDTO.getUserId());
+        user.setLastModifiedBy(userResponseDTO.getLastModifiedBy());
+        user.setLastModifiedDate(LocalDateTime.now());
+        user.setGender(userResponseDTO.getGender());
         return user;
     }
 
@@ -42,6 +64,11 @@ public class Mappers {
         userDTO.setLastModifiedBy(user.getLastModifiedBy());
         userDTO.setLastModifiedDate(user.getLastModifiedDate());
         userDTO.setLastLogin(user.getLastLogin());
+        userDTO.setRole(user.getRole());
+        userDTO.setBranch(user.getBranch());
+        userDTO.setFirstname(user.getFirstname());
+        userDTO.setLastname(user.getLastname());
+        userDTO.setGender(user.getGender());
         //userDTO.setRoles(rolesToStringList(user.getRoles()));
         //userDTO.setProfile(fromProfile(user.getProfile()));
         return userDTO;
@@ -89,7 +116,7 @@ public class Mappers {
         if(menu == null){
             return null;
         }
-        return new MenuDTO(menu.getId(), menu.getName(), menu.getUrlPath());
+        return new MenuDTO(menu.getId(), menu.getName(), menu.getBackendPath());
     }
 
     public static List<RoleDTO> fromListOfRole(final List<Role> roles){
@@ -110,7 +137,7 @@ public class Mappers {
     public static @NotNull Menu fromMenuDTO(final @NotNull MenuDTO menuDTO) {
         final Menu menu = new Menu();
         menu.setName(menuDTO.menuName());
-        menu.setUrlPath(menuDTO.urlPath());
+        menu.setBackendPath(menuDTO.urlPath());
         return menu;
     }
 

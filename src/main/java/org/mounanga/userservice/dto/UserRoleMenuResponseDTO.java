@@ -7,7 +7,33 @@ public class UserRoleMenuResponseDTO {
     private RoleDTO role;
     private List<MenuDTO> menu;
 
-    public UserRoleMenuResponseDTO(Long userId, RoleDTO role, List<MenuDTO> menu) {
+    public UserRoleMenuResponseDTO() {}
+    
+    public Long getUserId() {
+		return userId;
+	}
+
+	public void setUserId(Long userId) {
+		this.userId = userId;
+	}
+
+	public RoleDTO getRole() {
+		return role;
+	}
+
+	public void setRole(RoleDTO role) {
+		this.role = role;
+	}
+
+	public List<MenuDTO> getMenu() {
+		return menu;
+	}
+
+	public void setMenu(List<MenuDTO> menu) {
+		this.menu = menu;
+	}
+
+	public UserRoleMenuResponseDTO(Long userId, RoleDTO role, List<MenuDTO> menu) {
         this.userId = userId;
         this.role = role;
         this.menu = menu;
@@ -18,6 +44,7 @@ public class UserRoleMenuResponseDTO {
     public static class RoleDTO {
         private String roleName;
 
+        public RoleDTO() {}
         public RoleDTO(String roleName) {
             this.roleName = roleName;
         }
@@ -37,6 +64,7 @@ public class UserRoleMenuResponseDTO {
         private Long id;
         private String name;
 
+        public MenuDTO() {}
         public MenuDTO(Long id, String name) {
             this.id = id;
             this.name = name;

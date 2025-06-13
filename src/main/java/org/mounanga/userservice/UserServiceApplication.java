@@ -63,6 +63,8 @@ public class UserServiceApplication {
 				Role role = new Role();
 				role.setName("SUPER_ADMIN");
 				role.setDescription("the default role that all super administrators should have");
+				role.setEnabled(Boolean.TRUE);
+				role.setCreatedDate(LocalDateTime.now());
 				roleRepository.save(role);
 
 				/*
@@ -82,7 +84,7 @@ public class UserServiceApplication {
 				branch.setName("Test Branch");
 				branch.setLocation("Mumbai");
 				branch.setEnabled(Boolean.TRUE);
-
+				branch.setCreatedDate(LocalDateTime.now());
 				branchRepository.save(branch);
 			}
 			if (!menuRepository.existsBy()) {
@@ -90,7 +92,8 @@ public class UserServiceApplication {
 				menu.setName("Dashboard");
 				menu.setDisplayOrder(0);
 				menu.setEnabled(Boolean.TRUE);
-				menu.setUrlPath("/dashboard");
+				menu.setFrontendPath("/admin/usercreation");
+				menu.setBackendPath("/api/user");
 
 				menuRepository.save(menu);
 			}
@@ -125,6 +128,8 @@ public class UserServiceApplication {
 				user.setEmail(applicationProperties.getSuperUserEmail());
 				user.setPasswordNeedsToBeChanged(true);
 				user.setLastLogin(LocalDateTime.now());
+				user.setFirstname("balakrishnan");
+				user.setLastname("saranya");
 				String password = UUID.randomUUID().toString();
 				user.setPassword(passwordEncoder.encode(password));
 				Optional<Role> role = roleRepository.findById(1l);

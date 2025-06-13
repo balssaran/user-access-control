@@ -60,7 +60,7 @@ public class MenuServiceImpl implements MenuService {
                 throw new ResourceAlreadyExistException("Role with name " + dto.menuName() + " already exists");
         }
         menu.setName(dto.menuName());
-        menu.setUrlPath(dto.urlPath());
+        menu.setBackendPath(dto.urlPath());
         Menu updatedMenu = menuRepository.save(menu);
         log.info("Role with name '{}' updated at '{}' by '{}'", updatedMenu.getName());
         return Mappers.fromMenu(updatedMenu);

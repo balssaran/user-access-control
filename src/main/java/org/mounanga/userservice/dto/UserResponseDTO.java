@@ -5,6 +5,10 @@ import lombok.*;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import org.mounanga.userservice.entity.Branch;
+import org.mounanga.userservice.entity.Role;
+import org.mounanga.userservice.enums.Gender;
+
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
@@ -15,14 +19,17 @@ public class UserResponseDTO {
     private Long id;
     private String email;
     private String username;
+    private String firstname;
+    private String lastname;
     private Boolean enabled;
     private LocalDateTime lastLogin;
     private LocalDateTime createdDate;
     private LocalDateTime lastModifiedDate;
-    private String createBy;
-    private String lastModifiedBy;
-    private ProfileResponseDTO profile;
-    private List<String> roles;
+    private Long createBy;
+    private Long lastModifiedBy;
+    private Branch branch;
+    private Role role;
+    private Gender gender;
 	public Long getId() {
 		return id;
 	}
@@ -40,6 +47,19 @@ public class UserResponseDTO {
 	}
 	public void setUsername(String username) {
 		this.username = username;
+	}
+	
+	public String getFirstname() {
+		return firstname;
+	}
+	public void setFirstname(String firstname) {
+		this.firstname = firstname;
+	}
+	public String getLastname() {
+		return lastname;
+	}
+	public void setLastname(String lastname) {
+		this.lastname = lastname;
 	}
 	public Boolean getEnabled() {
 		return enabled;
@@ -65,30 +85,38 @@ public class UserResponseDTO {
 	public void setLastModifiedDate(LocalDateTime lastModifiedDate) {
 		this.lastModifiedDate = lastModifiedDate;
 	}
-	public String getCreateBy() {
+	public Long getCreateBy() {
 		return createBy;
 	}
-	public void setCreateBy(String createBy) {
+	public void setCreateBy(Long createBy) {
 		this.createBy = createBy;
 	}
-	public String getLastModifiedBy() {
+	public Long getLastModifiedBy() {
 		return lastModifiedBy;
 	}
-	public void setLastModifiedBy(String lastModifiedBy) {
+	public void setLastModifiedBy(Long lastModifiedBy) {
 		this.lastModifiedBy = lastModifiedBy;
 	}
-	public ProfileResponseDTO getProfile() {
-		return profile;
+	
+	public Branch getBranch() {
+		return branch;
 	}
-	public void setProfile(ProfileResponseDTO profile) {
-		this.profile = profile;
+	public void setBranch(Branch branch) {
+		this.branch = branch;
 	}
-	public List<String> getRoles() {
-		return roles;
+	public Role getRole() {
+		return role;
 	}
-	public void setRoles(List<String> roles) {
-		this.roles = roles;
+	public void setRole(Role role) {
+		this.role = role;
 	}
+	public Gender getGender() {
+		return gender;
+	}
+	public void setGender(Gender gender) {
+		this.gender = gender;
+	}
+	
     
     
 }

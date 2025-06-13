@@ -1,5 +1,6 @@
 package org.mounanga.userservice.entity;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -40,7 +41,11 @@ public class Menu {
 	@JoinColumn(name = "parent_menu_id") // Creates a foreign key column in the table
 	private Menu parentMenuid;
 
-	private String urlPath;
+	@Column(name="frontend_path")
+	private String frontendPath;
+	
+	@Column(name="backend_path")
+	private String backendPath;
 
 	private int displayOrder;
 
@@ -49,6 +54,18 @@ public class Menu {
 	
 	@OneToMany(mappedBy = "menu", cascade = CascadeType.ALL)
 	private List<RoleMenu> roleMenus;
+	
+	@Column(name="created_date")
+	private LocalDateTime createdDate;
+
+	@Column(name="last_modified_date")
+	private LocalDateTime lastModifiedDate;
+
+	@Column(name="create_by")
+	private String createBy;
+
+	@Column(name="last_modified_by")
+	private String lastModifiedBy;
 
 	public Long getId() {
 		return id;
@@ -76,12 +93,20 @@ public class Menu {
 		this.parentMenuid = parentMenuid;
 	}
 
-	public String getUrlPath() {
-		return urlPath;
+	public String getFrontendPath() {
+		return frontendPath;
 	}
 
-	public void setUrlPath(String urlPath) {
-		this.urlPath = urlPath;
+	public void setFrontendPath(String frontendPath) {
+		this.frontendPath = frontendPath;
+	}
+
+	public String getBackendPath() {
+		return backendPath;
+	}
+
+	public void setBackendPath(String backendPath) {
+		this.backendPath = backendPath;
 	}
 
 	public int getDisplayOrder() {
@@ -106,6 +131,38 @@ public class Menu {
 
 	public void setRoleMenus(List<RoleMenu> roleMenus) {
 		this.roleMenus = roleMenus;
+	}
+
+	public LocalDateTime getCreatedDate() {
+		return createdDate;
+	}
+
+	public void setCreatedDate(LocalDateTime createdDate) {
+		this.createdDate = createdDate;
+	}
+
+	public LocalDateTime getLastModifiedDate() {
+		return lastModifiedDate;
+	}
+
+	public void setLastModifiedDate(LocalDateTime lastModifiedDate) {
+		this.lastModifiedDate = lastModifiedDate;
+	}
+
+	public String getCreateBy() {
+		return createBy;
+	}
+
+	public void setCreateBy(String createBy) {
+		this.createBy = createBy;
+	}
+
+	public String getLastModifiedBy() {
+		return lastModifiedBy;
+	}
+
+	public void setLastModifiedBy(String lastModifiedBy) {
+		this.lastModifiedBy = lastModifiedBy;
 	}
 
 

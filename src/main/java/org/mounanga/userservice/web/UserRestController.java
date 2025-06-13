@@ -22,38 +22,38 @@ public class UserRestController {
         this.securityInformation = securityInformation;
     }
 
-    @PreAuthorize("hasAnyAuthority('ADMIN','SUPER_ADMIN')")
+   
     @PostMapping("/create")
-    public UserResponseDTO createUser(@RequestBody @Valid UserRequestDTO dto) {
+    public UserResponseDTO createUser(@RequestBody UserRequestDTO dto) {
         return userService.createUser(dto);
     }
 
-    @PreAuthorize("hasAnyAuthority('ADMIN','SUPER_ADMIN')")
+   
     @PutMapping("/update/{id}")
-    public UserResponseDTO updateUser(@PathVariable Long id, @Valid @RequestBody UpdateEmailUsernameDTO dto) {
+    public UserResponseDTO updateUser(@PathVariable Long id, @Valid @RequestBody UserRequestDTO dto) {
         return userService.updateUser(id, dto);
     }
 
-    @PreAuthorize("hasAnyAuthority('ADMIN','SUPER_ADMIN')")
+    
     @PutMapping("/update-profile/{id}")
     public ProfileResponseDTO updateProfile(@PathVariable Long id, @Valid @RequestBody UserRequestDTO dto) {
         return userService.updateProfile(id, dto);
     }
 
-    @PreAuthorize("hasAnyAuthority('ADMIN','SUPER_ADMIN', 'USER')")
+    
     @GetMapping("/get/{id}")
     public UserResponseDTO getUserById(@PathVariable Long id) {
         return userService.getUserById(id);
     }
 
-    @PreAuthorize("hasAnyAuthority('ADMIN','SUPER_ADMIN', 'USER')")
+   
     @GetMapping("/list")
     public PageModel<UserResponseDTO> getAllUsers(@RequestParam(defaultValue = "0", name = "page")  int page,
                                                   @RequestParam(defaultValue = "9", name = "size")  int size) {
         return userService.getAllUsers(page, size);
     }
 
-    @PreAuthorize("hasAnyAuthority('ADMIN','SUPER_ADMIN', 'USER')")
+    
     @GetMapping("/search")
     public PageModel<UserResponseDTO> searchUsers(@RequestParam(defaultValue = "", name = "keyword") String keyword,
                                                   @RequestParam(defaultValue = "0", name = "page")  int page,
@@ -61,31 +61,31 @@ public class UserRestController {
         return userService.searchUsers(keyword, page, size);
     }
 
-    @PreAuthorize("hasAnyAuthority('ADMIN','SUPER_ADMIN')")
+    
     @DeleteMapping("/delete/{id}")
     public void deleteUserById(@PathVariable Long id) {
         userService.deleteUserById(id);
     }
 
-    @PreAuthorize("hasAnyAuthority('ADMIN','SUPER_ADMIN')")
+    
     @DeleteMapping("/delete-all")
     public void deleteAllUsersByIds(@RequestBody List<Long> ids) {
         userService.deleteAllUsersByIds(ids);
     }
 
-    @PreAuthorize("hasAnyAuthority('ADMIN','SUPER_ADMIN')")
+    
     @PostMapping("/add-role")
     public UserResponseDTO addRoleToUser(@RequestBody @Valid UserRoleRequestDTO dto) {
         return userService.addRoleToUser(dto);
     }
 
-    @PreAuthorize("hasAnyAuthority('ADMIN','SUPER_ADMIN')")
+    
     @PostMapping("/remove-role")
     public UserResponseDTO removeRoleFromUser(@RequestBody @Valid UserRoleRequestDTO dto) {
         return userService.removeRoleFromUser(dto);
     }
 
-    @PreAuthorize("hasAnyAuthority('ADMIN','SUPER_ADMIN', 'USER')")
+   
     @GetMapping("/profile")
     public UserResponseDTO getCurrentUser() {
         return userService.getUserByUsername(
@@ -95,7 +95,8 @@ public class UserRestController {
     
     
     @GetMapping("/{userId}/menu-info")
-    public ResponseEntity<UserRoleMenuResponseDTO> getUserRoleMenus(@PathVariable Long userId) {
-        return ResponseEntity.ok(userService.getUserRoleMenu(userId));
+    public UserRoleMenuResponseDTO getUserRoleMenus(@PathVariable Long userId) {
+    	UserRoleMenuResponseDTO userRoleMenuResponseDTO=userService.getUserRoleMenu(userId);
+        return userRoleMenuResponseDTO;
     }
 }

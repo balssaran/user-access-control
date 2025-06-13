@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface UserService {
     UserResponseDTO createUser(UserRequestDTO dto);
-    UserResponseDTO updateUser(Long id, UpdateEmailUsernameDTO dto);
+    UserResponseDTO updateUser(Long id, UserRequestDTO dto);
     ProfileResponseDTO updateProfile(Long id, UserRequestDTO dto);
     UserResponseDTO getUserById(Long id);
     PageModel<UserResponseDTO> getAllUsers(int page, int size);

@@ -42,33 +42,49 @@ public class RoleMenuServiceImpl implements RoleMenuService {
 	}
 
 	@Transactional
-    @Override
-    public RoleMenu createMenu(RoleMenu roleMenu) {
-        log.info("In createRole()");
-        //Menu menu = Mappers.fromMenuDTO(dto);
-        Optional<RoleMenu> roleMenuOptional =roleMenuRepository.findByRoleandMenu(roleMenu.getRole().getId(),roleMenu.getMenu().getId());
-       if(!roleMenuOptional.isPresent()) {
-    	   throw new ResourceAlreadyExistException("Role and Menu with " + roleMenu.getRole().getId() +", "+ roleMenu.getMenu().getId()+ " already exists"); 
-       }
-       
-        RoleMenu savedRoleMenu = roleMenuRepository.save(roleMenu);
-        log.info("Role Id '{}' and Menu ID '{}' created at '{}' by '{}'", savedRoleMenu.getRole().getId(),savedRoleMenu.getMenu().getId());
-        return savedRoleMenu;
-    }
+	@Override
+	public RoleMenu createMenu(RoleMenu roleMenu) {
+		log.info("In createRole()");
+		// Menu menu = Mappers.fromMenuDTO(dto);
+		Optional<RoleMenu> roleMenuOptional = roleMenuRepository.findByRoleandMenu(roleMenu.getRole().getId(),
+				roleMenu.getMenu().getId());
+		if (!roleMenuOptional.isPresent()) {
+			throw new ResourceAlreadyExistException("Role and Menu with " + roleMenu.getRole().getId() + ", "
+					+ roleMenu.getMenu().getId() + " already exists");
+		}
+
+		RoleMenu savedRoleMenu = roleMenuRepository.save(roleMenu);
+		log.info("Role Id '{}' and Menu ID '{}' created at '{}' by '{}'", savedRoleMenu.getRole().getId(),
+				savedRoleMenu.getMenu().getId());
+		return savedRoleMenu;
+	}
 
 	@Transactional
 	@Override
 	public RoleMenu updateMenu(Long id, @NotNull RoleMenu roleMenu) {
 		log.info("In updateRole()");
-		//Menu menu = findMenuById(id);
-		Optional<RoleMenu> roleMenuOptional =roleMenuRepository.findByRoleandMenu(roleMenu.getRole().getId(),roleMenu.getMenu().getId());
+		// Menu menu = findMenuById(id);
+		Optional<RoleMenu> roleMenuOptional = roleMenuRepository.findByRoleandMenu(roleMenu.getRole().getId(),
+				roleMenu.getMenu().getId());
 		if (!roleMenuOptional.isPresent()) {
-			throw new ResourceAlreadyExistException("Role and Menu with " + roleMenu.getRole().getId() +", "+ roleMenu.getMenu().getId()+ " already exists"); 
+			throw new ResourceAlreadyExistException("Role and Menu with " + roleMenu.getRole().getId() + ", "
+					+ roleMenu.getMenu().getId() + " already exists");
 		}
-		
+
 		RoleMenu updatedroleMenu = roleMenuRepository.save(roleMenu);
-		log.info("Role Id '{}' and Menu ID '{}' created at '{}' by '{}'", updatedroleMenu.getRole().getId(),updatedroleMenu.getMenu().getId());
+		log.info("Role Id '{}' and Menu ID '{}' created at '{}' by '{}'", updatedroleMenu.getRole().getId(),
+				updatedroleMenu.getMenu().getId());
 		return updatedroleMenu;
+	}
+
+	public boolean hasAccess(String roleName, String path) {
+		
+		
+	boolean returntype= roleMenuRepository.hasAccess(roleName,
+				path);
+	return returntype;
+		
+		
 	}
 
 	/*
